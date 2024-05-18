@@ -4,7 +4,7 @@ import { refferalCode } from '../utilities/refferalCodeGenerate';
 interface userData{
     name:string;
     email:string;
-    mobile:string;
+    mobile:number;
     password:string;
     reffered_Code:string
 }
@@ -42,5 +42,5 @@ export default{
             return { message: (error as Error).message };
 
         }
-    }
+    },
 }

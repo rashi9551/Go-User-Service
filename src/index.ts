@@ -31,7 +31,7 @@ app.use('/users',userRoute)
 app.get('/',(req:Request,res:Response)=>{
     res.send().status(200)
 })
-const port=3000
+const port=process.env.PORT||3002
 server.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });

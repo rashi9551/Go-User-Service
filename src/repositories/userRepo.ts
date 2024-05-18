@@ -3,7 +3,7 @@ import user from '../entities/user'
 interface registration {
     name:string;
     email:string;
-    mobile:string;
+    mobile:number;
     password:string;
     referral_code:string;
 }
@@ -31,7 +31,18 @@ export default {
             const userDetail=await user.findOne({mobile})
             return userDetail
         } catch (error) {
+            return (error as Error).message
+
+        }
+    },
+    findUser:async(mobile:number)=>{
+        try {
+            const userData =await user.findOne({mobile})
+            return userData
             
+        } catch (error) {
+            return (error as Error).message
+
         }
     }
 }

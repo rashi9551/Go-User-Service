@@ -37,6 +37,16 @@ exports.default = {
             return userDetail;
         }
         catch (error) {
+            return error.message;
+        }
+    }),
+    findUser: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const userData = yield user_1.default.findOne({ mobile });
+            return userData;
+        }
+        catch (error) {
+            return error.message;
         }
     })
 };

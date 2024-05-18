@@ -12,33 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const registartion_1 = __importDefault(require("../../useCases/registartion"));
+const auth_1 = __importDefault(require("../middleware/auth"));
+const userRepo_1 = __importDefault(require("../repositories/userRepo"));
 exports.default = {
-    sigunp: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, email, mobile, password, reffered_Code } = req.body;
-        const userData = {
-            name,
-            email,
-            mobile,
-            password,
-            reffered_Code
-        };
+    checkLoginUser: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const response = yield registartion_1.default.user_registration(userData);
-            res.json(response);
+            const user = yield userRepo_1.default.findUser(mobile);
+            if (user) {
+                if (user.account_status != "Blocked") {
+                    const token = yield auth_1.default.createToken(user._id.toString());
+                    return { message: "Success", name: user.name, token, _id: user._id };
+                }
+                else {
+                    return { message: "Blocked" };
+                }
+            }
+            else {
+                return { message: "No user found" };
+            }
         }
         catch (error) {
-            res.status(500).json({ error: error.message });
         }
-    }),
-    checkUser: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const { mobile } = req.body;
-        try {
-            const response = yield registartion_1.default.checkUser(mobile);
-            res.json(response);
-        }
-        catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }),
+    })
 };

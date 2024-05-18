@@ -28,7 +28,7 @@ app.use('/users', userRoute_1.default);
 app.get('/', (req, res) => {
     res.send().status(200);
 });
-const port = 3000;
+const port = process.env.PORT || 3002;
 server.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
