@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const uuid_1 = require("uuid");
 const express_session_1 = __importDefault(require("express-session"));
 const http_1 = __importDefault(require("http"));
+const adminRoute_1 = __importDefault(require("./interfaces/routes/adminRoute"));
 const mongo_1 = __importDefault(require("./config/mongo"));
 const userRoute_1 = __importDefault(require("./interfaces/routes/userRoute"));
 const app = (0, express_1.default)();
@@ -25,6 +26,7 @@ app.use((0, express_session_1.default)({
 }));
 (0, mongo_1.default)();
 app.use('/users', userRoute_1.default);
+app.use('/admin', adminRoute_1.default);
 app.get('/', (req, res) => {
     res.send().status(200);
 });

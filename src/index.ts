@@ -3,6 +3,7 @@ import cors from "cors"
 import {v4 as uuidv4} from 'uuid'
 import session from 'express-session'
 import http from 'http'
+import adminRote from './interfaces/routes/adminRoute'
 
 import connectDB from './config/mongo'
 import userRoute from './interfaces/routes/userRoute'
@@ -27,6 +28,7 @@ app.use(
 connectDB()
 
 app.use('/users',userRoute)
+app.use('/admin',adminRote)
 
 app.get('/',(req:Request,res:Response)=>{
     res.send().status(200)
