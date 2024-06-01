@@ -13,11 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userRepo_1 = __importDefault(require("../repositories/userRepo"));
+const awsS3_1 = __importDefault(require("../services/awsS3"));
 const bcrypt_1 = __importDefault(require("../services/bcrypt"));
 const refferalCodeGenerate_1 = require("../utilities/refferalCodeGenerate");
 exports.default = {
     user_registration: (userData) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, email, mobile, password, reffered_Code } = userData;
+        const { name, email, mobile, password, reffered_Code, userImage } = userData;
+        const imageUrl = yield (0, awsS3_1.default)(userImage);
         const refferal_code = (0, refferalCodeGenerate_1.refferalCode)();
         const hashedPassword = yield bcrypt_1.default.securePassword(password);
         const newUserData = {
@@ -25,17 +27,21 @@ exports.default = {
             email,
             mobile,
             password: hashedPassword,
-            referral_code: "hgdfgfcghcf"
+            referral_code: refferal_code,
+            userImage: imageUrl
         };
         const response = yield userRepo_1.default.saveUser(newUserData);
         if (typeof response !== "string" && response._id) {
             // const token = await auth.createToken(response._id.toString())
             return ({ message: "Success" });
         }
+        else {
+            console.log(response);
+        }
     }),
-    checkUser: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
+    checkUser: (mobile, email) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const user = yield userRepo_1.default.checkUser(mobile);
+            const user = yield userRepo_1.default.checkUser(mobile, email);
             if (user) {
                 return { message: "user already have an account !" };
             }

@@ -53,6 +53,7 @@ const UserSchema = new mongoose_1.Schema({
     },
     account_status: {
         type: String,
+        default: "unblocked"
     },
     wallet: {
         balance: {

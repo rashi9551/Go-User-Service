@@ -32,6 +32,27 @@ exports.default = {
             }
         }
         catch (error) {
+            return error.message;
+        }
+    }),
+    checkGoogleUser: (email) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const user = yield userRepo_1.default.findEmail(email);
+            if (user) {
+                if (user.account_status != "Blocked") {
+                    const token = yield auth_1.default.createToken(user._id.toString());
+                    return { message: "Success", name: user.name, token, _id: user._id };
+                }
+                else {
+                    return { message: "Blocked" };
+                }
+            }
+            else {
+                return { message: "No user found" };
+            }
+        }
+        catch (error) {
+            return error.message;
         }
     })
 };

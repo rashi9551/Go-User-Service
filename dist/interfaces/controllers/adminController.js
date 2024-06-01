@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = __importDefault(require("../../entities/user"));
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const mongodb_1 = require("mongodb");
 exports.default = {
@@ -28,5 +29,51 @@ exports.default = {
         }
         catch (error) {
         }
-    })
+    }),
+    getData: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const response = yield user_1.default.find({ account_status: 'Good' });
+            res.json(response);
+        }
+        catch (error) {
+        }
+    }),
+    blockUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const id = req.query.id;
+            const response = yield user_1.default.findByIdAndUpdate(id, {
+                $set: {
+                    account_status: "Good"
+                }
+            });
+            res.status(200);
+        }
+        catch (error) {
+        }
+    }),
+    getBlockedData: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const response = yield user_1.default.find({ account_status: 'Blocked' });
+            res.json(response);
+        }
+        catch (error) {
+        }
+    }),
+    unblockUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const id = req.query.id;
+            const response = yield user_1.default.findByIdAndUpdate(id, {
+                $set: {
+                    account_status: "Good"
+                }
+            }, {
+                new: true
+            });
+            res.json({ message: "Success" });
+        }
+        catch (error) {
+            console.log(error);
+            res.json(error.message);
+        }
+    }),
 };

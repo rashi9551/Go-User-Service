@@ -19,6 +19,53 @@ export default {
         } catch (error) {
             
         }
-    }
-
+    },
+    getData:async(req:Request,res:Response)=>{
+        try {
+            const response=await user.find({account_status:'Good'})
+            res.json(response)
+        } catch (error) {
+            
+        }
+    },
+    blockUser:async(req:Request,res:Response)=>{
+        try {
+            const id = req.query.id;
+            const response = await user.findByIdAndUpdate(id,{
+                $set:{
+                    account_status:"Good"
+                }
+            });         
+            res.status(200)
+        } catch (error) {
+            
+        }
+    },
+    getBlockedData:async(req:Request,res:Response)=>{
+        try {
+            const response=await user.find({account_status:'Blocked'})
+            res.json(response)
+        } catch (error) {
+            
+        }
+    },
+    unblockUser:async(req:Request,res:Response)=>{
+        try {
+            const id = req.query.id;
+            const response = await user.findByIdAndUpdate(id,{
+                $set:{
+                    account_status:"Good"
+                }
+            },
+            {
+                new:true
+            }
+        );            
+            res.json({message:"Success"})
+        } catch (error) {
+            console.log(error);
+            res.json((error as Error).message);
+        }
+    },
+    
 }

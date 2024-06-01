@@ -15,10 +15,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.default = {
     createToken: (clientId) => __awaiter(void 0, void 0, void 0, function* () {
-        const jwtSeceretKey = "Rashid";
-        const token = jsonwebtoken_1.default.sign({ clientId }, jwtSeceretKey);
+        const jwtSeceretKey = process.env.USER_SECRET_KEY || "Rashid";
+        const token = yield jsonwebtoken_1.default.sign({ clientId }, jwtSeceretKey);
         return token;
     }),
+    verifyOtpToken: (token) => {
+        const secretKey = process.env.USER_SECRET_KEY || "Rashid";
+        console.log(token);
+        try {
+            const decodedToken = jsonwebtoken_1.default.verify(token, secretKey);
+            console.log(decodedToken, "decode");
+            return decodedToken;
+        }
+        catch (error) {
+            console.error('Token verification failed:', error.message);
+            return ({ message: "inavlid otp" });
+        }
+    },
     verifyToken: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         try {
@@ -28,7 +41,7 @@ exports.default = {
             }
             else {
                 try {
-                    const jwtSecretKey = "Rashid";
+                    const jwtSecretKey = process.env.USER_SECRET_KEY || "Rashid";
                     const decodedToken = jsonwebtoken_1.default.verify(token, jwtSecretKey);
                     // req.clientId = decodedToken.clientId;
                     next();

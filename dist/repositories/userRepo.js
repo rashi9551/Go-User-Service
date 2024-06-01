@@ -20,7 +20,8 @@ exports.default = {
             email: userData.email,
             mobile: userData.mobile,
             password: userData.password,
-            referral_code: userData.referral_code
+            referral_code: userData.referral_code,
+            userImage: userData.userImage
         });
         try {
             const saveUser = yield newUser.save();
@@ -31,10 +32,16 @@ exports.default = {
             return error.message;
         }
     }),
-    checkUser: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
+    checkUser: (mobile, email) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const userDetail = yield user_1.default.findOne({ mobile });
-            return userDetail;
+            const userDetailWithMobile = yield user_1.default.findOne({ mobile });
+            if (userDetailWithMobile) {
+                return userDetailWithMobile;
+            }
+            const userDetailWithEmail = yield user_1.default.findOne({ email });
+            if (userDetailWithEmail) {
+                return userDetailWithEmail;
+            }
         }
         catch (error) {
             return error.message;
@@ -43,6 +50,15 @@ exports.default = {
     findUser: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const userData = yield user_1.default.findOne({ mobile });
+            return userData;
+        }
+        catch (error) {
+            return error.message;
+        }
+    }),
+    findEmail: (email) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const userData = yield user_1.default.findOne({ email });
             return userData;
         }
         catch (error) {

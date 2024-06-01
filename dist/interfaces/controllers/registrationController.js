@@ -13,32 +13,74 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const registartion_1 = __importDefault(require("../../useCases/registartion"));
+const auth_1 = __importDefault(require("../../middleware/auth"));
+const otpSending_1 = require("../../utilities/otpSending");
 exports.default = {
-    sigunp: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, email, mobile, password, reffered_Code } = req.body;
+    signup: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const { name, email, mobile, password, reffered_Code, otp } = req.body;
         const userData = {
             name,
             email,
             mobile,
             password,
-            reffered_Code
+            reffered_Code,
+            userImage: req.file
         };
         try {
-            const response = yield registartion_1.default.user_registration(userData);
-            res.json(response);
+            const token = req.cookies.otp;
+            const secretKey = process.env.USER_SECRET_KEY || "Rashid";
+            const jwtOtp = auth_1.default.verifyOtpToken(token);
+            console.log(jwtOtp, "ithu coookkie token");
+            if (otp === (jwtOtp === null || jwtOtp === void 0 ? void 0 : jwtOtp.clientId)) {
+                const response = yield registartion_1.default.user_registration(userData);
+                console.log(response);
+                res.json(response);
+            }
+            else {
+                res.json({ message: "Invalid OTP" });
+            }
         }
         catch (error) {
+            console.log(error);
             res.status(500).json({ error: error.message });
         }
     }),
     checkUser: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const { mobile } = req.body;
+        const { mobile, email, name } = req.body;
         try {
-            const response = yield registartion_1.default.checkUser(mobile);
+            const response = yield registartion_1.default.checkUser(mobile, email);
+            console.log(response);
+            if (response.message === "user not registered") {
+                console.log("nokkindu");
+                const token = yield (0, otpSending_1.sendOtp)(email);
+                res.cookie("otp", token, {
+                    httpOnly: true,
+                    expires: new Date(Date.now() + 180000),
+                    sameSite: "none",
+                    secure: true,
+                });
+            }
             res.json(response);
         }
         catch (error) {
             res.status(500).json({ error: error.message });
         }
     }),
+    resendOtp: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const { email, name } = req.body;
+            console.log("email", email);
+            const token = yield (0, otpSending_1.sendOtp)(email);
+            res.cookie("otp", token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 180000),
+                sameSite: "none",
+                secure: true,
+            });
+            res.status(200).json({ message: "OTP resent successfully" });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    })
 };
