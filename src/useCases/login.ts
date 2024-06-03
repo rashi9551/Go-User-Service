@@ -5,8 +5,7 @@ import userRepo from '../repositories/userRepo'
 export default {
     checkLoginUser:async (mobile:number)=>{
         try {
-            const user=await userRepo.findUser(mobile) as UserInterface
-            
+            const user=await userRepo.findUser(mobile) as UserInterface            
             if(user)
             {
                 if(user.account_status!="Blocked"){
@@ -26,6 +25,7 @@ export default {
     checkGoogleUser:async(email:string)=>{
         try {
             const user=await userRepo.findEmail(email) as UserInterface
+            console.log(user,"ithu user");
             if(user)
                 {
                     if(user.account_status!="Blocked"){

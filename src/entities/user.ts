@@ -54,7 +54,7 @@ const UserSchema: Schema = new Schema({
     },
     account_status: {
         type: String,
-        default:"unblocked"
+        default:"Good"
     },
     wallet: {
         balance: {

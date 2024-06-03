@@ -1,38 +1,40 @@
 import { Request,Response,NextFunction } from "express";
-import registartion from "../../useCases/login";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import user from "../../entities/user";
+import registartion from "../useCases/login";
+import user from "../entities/user";
 import moment from "moment";
 
 export default {
-    checkLoginUser:async (req:Request,res:Response,next:NextFunction)=>{
-        const {mobile}=req.body
+    checkLoginUser:async (call:any,callback:any)=>{
+        const {mobile}=call.request
+        console.log(call.request);
+        
         try {
             const response=await registartion.checkLoginUser(mobile)
-            res.json(response)
+            callback(null,response)
         } catch (error) {
             console.log(error);
-            
+            callback(null,{ error: (error as Error).message });
         }
-
     },
-    checkGoogleLoginUser:async(req:Request,res:Response)=>{
+    checkGoogleLoginUser:async(call:any,callback:any)=>{
+        const {email}=call.request
+        console.log(call.request);
         try {
-            const {email}=req.body
-            console.log(email);
             const response=await registartion.checkGoogleUser(email)
-            res.json(response)
-            
+            console.log(response);
+            callback(null,response)
         } catch (error) {
             console.log(error);
+            callback(null,{ error: (error as Error).message });
         }
     },
-    getUser:async(req:Request,res:Response)=>{
+    getUser:async(call:any,callback:any)=>{
         try {
-            const {id}=req.query
+            const {id}=call.request
             console.log(id);
             
             const response=await user.findById(id)
+            console.log(response);
             if (response) {
                 const formattedDate = moment(response.joiningDate).format("dddd, DD-MM-YYYY");
                 const formattedUserData = { ...response.toObject(), formattedDate };
@@ -41,20 +43,21 @@ export default {
                     formattedDate: moment(transactions.date).format("dddd, DD-MM-YYYY"),
                 }));
                 const newData = { ...formattedUserData, formattedTransactions };
-                res.json(newData);
+                console.log(newData,"ithu new data");
+                callback(null,newData);
             } else {
-                res.status(500).json({ message: "Soemthing Internal Error" });
+                callback(null,{ message: "Soemthing Internal Error" });
             }
         } catch (error) {
             console.log(error);
-
+            callback(null,{ error: (error as Error).message });
         }
     },
 
-    profileUpdate:async(req:Request,res:Response)=>{
-        const {user_id}=req.query
-        const {name,email,mobile}=req.body
-
+    profileUpdate:async(call:any,callback:any)=>{
+        const {name,email,mobile,id}=call.request
+        console.log(call.request);
+        
         try {
             const updateFields: { name?: string; email?: string; mobile?: number } = {};
 
@@ -70,12 +73,16 @@ export default {
                 updateFields.mobile = mobile;
             }
 
-            const userData= await user.findOneAndUpdate({_id:user_id},{$set:updateFields},{new:true}).exec()
-
-            res.json({message:"Success",userData})
+            const userData= await user.findOneAndUpdate({_id:id},{$set:updateFields},{new:true}).exec()
+            const formattedDate = moment(userData?.joiningDate).format("dddd, DD-MM-YYYY");
+            const formattedUserData = { ...userData?.toObject(), formattedDate };
+            console.log(formattedUserData,"ithu userData");
+            callback(null,{message:"Success",formattedUserData})
             
         } catch (error) {
-            res.status(500).json({ message: (error as Error).message });
+            console.log(error);
+            
+            callback(null,{ error: (error as Error).message });
 
         }
     }

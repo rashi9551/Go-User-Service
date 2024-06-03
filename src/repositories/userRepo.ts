@@ -18,7 +18,9 @@ export default {
             mobile:userData.mobile,
             password:userData.password,
             referral_code:userData.referral_code,
-            userImage:userData.userImage
+            userImage:userData.userImage,
+            joiningDate:Date.now()
+
         });try {
             const saveUser=await newUser.save();
             console.log("user saved into db");

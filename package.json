@@ -1,9 +1,9 @@
 {
   "name": "go-user",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "start": "nodemon ./src/index.ts",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.583.0",
+    "@grpc/grpc-js": "^1.10.8",
+    "@grpc/proto-loader": "^0.7.13",
     "@types/cookie-parser": "^1.4.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
