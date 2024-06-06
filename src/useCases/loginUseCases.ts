@@ -2,8 +2,8 @@ import { UserInterface } from '../entities/user'
 import auth from '../middleware/auth'
 import userRepo from '../repositories/userRepo'
 
-export default {
-    checkLoginUser:async (mobile:number)=>{
+export default class loginUseCase{
+    checkLoginUser=async (mobile:number)=>{
         try {
             const user=await userRepo.findUser(mobile) as UserInterface            
             if(user)
@@ -21,8 +21,8 @@ export default {
             return (error as Error).message
 
         }
-    },
-    checkGoogleUser:async(email:string)=>{
+    }
+    checkGoogleUser=async(email:string)=>{
         try {
             const user=await userRepo.findEmail(email) as UserInterface
             console.log(user,"ithu user");

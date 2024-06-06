@@ -2,10 +2,16 @@ import path from 'path';
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 import connectDB from './config/mongo';
-import registrationController from './controllers/registrationController';
 
-import loginController from './controllers/loginController';
-import adminController from './controllers/adminController';
+
+import registrationControl from './controllers/registrationController';
+import loginControl from './controllers/loginController';
+import adminControl from './controllers/adminController';
+
+
+const adminController= new adminControl()
+const loginController= new loginControl()
+const registrationController= new registrationControl() 
 
 connectDB();
 
@@ -48,7 +54,9 @@ server.addService(userProto.User.service, {
 
 
 const grpcServer = () => {
-  const port = process.env.PORT || '3001';
+  const port = process.env.PORT || '3002';
+  console.log(port,"sdjfgsjh");
+  
   server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, bindPort) => {
     if (err) {
       console.error("Error starting gRPC server:", err);

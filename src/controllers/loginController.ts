@@ -1,34 +1,36 @@
 import { Request,Response,NextFunction } from "express";
-import registartion from "../useCases/login";
+import loginUseCases from "../useCases/loginUseCases";
 import user from "../entities/user";
 import moment from "moment";
 
-export default {
-    checkLoginUser:async (call:any,callback:any)=>{
+const loginUseCase=new loginUseCases()
+
+export default class loginController{
+    checkLoginUser=async (call:any,callback:any)=>{
         const {mobile}=call.request
         console.log(call.request);
         
         try {
-            const response=await registartion.checkLoginUser(mobile)
+            const response=await loginUseCase.checkLoginUser(mobile)
             callback(null,response)
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });
         }
-    },
-    checkGoogleLoginUser:async(call:any,callback:any)=>{
+    }
+    checkGoogleLoginUser=async(call:any,callback:any)=>{
         const {email}=call.request
         console.log(call.request);
         try {
-            const response=await registartion.checkGoogleUser(email)
+            const response=await loginUseCase.checkGoogleUser(email)
             console.log(response);
             callback(null,response)
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });
         }
-    },
-    getUser:async(call:any,callback:any)=>{
+    }
+    getUser=async(call:any,callback:any)=>{
         try {
             const {id}=call.request
             console.log(id);
@@ -52,9 +54,9 @@ export default {
             console.log(error);
             callback(null,{ error: (error as Error).message });
         }
-    },
+    }
 
-    profileUpdate:async(call:any,callback:any)=>{
+    profileUpdate=async(call:any,callback:any)=>{
         const {name,email,mobile,id}=call.request
         console.log(call.request);
         
@@ -74,10 +76,18 @@ export default {
             }
 
             const userData= await user.findOneAndUpdate({_id:id},{$set:updateFields},{new:true}).exec()
-            const formattedDate = moment(userData?.joiningDate).format("dddd, DD-MM-YYYY");
-            const formattedUserData = { ...userData?.toObject(), formattedDate };
-            console.log(formattedUserData,"ithu userData");
-            callback(null,{message:"Success",formattedUserData})
+            if(userData){
+                
+                const formattedDate = moment(userData.joiningDate).format("dddd, DD-MM-YYYY");
+                    const formattedUserData = { ...userData.toObject(), formattedDate };
+                    const formattedTransactions = formattedUserData.wallet.transactions.map((transactions) => ({
+                        ...transactions,
+                        formattedDate: moment(transactions.date).format("dddd, DD-MM-YYYY"),
+                    }));
+                    const newData = { ...formattedUserData, formattedTransactions};
+                    console.log(newData,"ithu new data vanney");
+                    callback(null,{newData:newData,message:"Success"})
+            }
             
         } catch (error) {
             console.log(error);

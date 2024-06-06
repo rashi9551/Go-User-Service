@@ -4,8 +4,8 @@ import auth from "../middleware/auth"
 import { ObjectId } from "mongodb"
 
 
-export default {
-    login:async(call:any,callback:any)=>{
+export default class adminController {
+    login=async(call:any,callback:any)=>{
         try {
             const {email,password}=call.request   
             console.log(call.request);
@@ -20,8 +20,8 @@ export default {
         } catch (error) {
             
         }
-    },
-    getData:async(call:any,callback:any)=>{
+    }
+    getData=async(call:any,callback:any)=>{
         try {
             const User=await user.find({account_status:'Good'})
             console.log(User,"ithu good");
@@ -30,8 +30,8 @@ export default {
             console.log(error);
             
         }
-    },
-    getBlockedData:async(call:any,callback:any)=>{
+    }
+    getBlockedData=async(call:any,callback:any)=>{
         try {
             const User=await user.find({account_status:'Blocked'})
             console.log(User,"ithu blocked");
@@ -40,8 +40,8 @@ export default {
         } catch (error) {
             console.log(error);
         }
-    },
-    blockUser:async(call:any,callback:any)=>{
+    }
+    blockUser=async(call:any,callback:any)=>{
         try {
             const {id} = call.request            
             const response = await user.findByIdAndUpdate(id,{
@@ -53,8 +53,8 @@ export default {
         } catch (error) {
             console.log(error);
         }
-    },
-    unblockUser:async(call:any,callback:any)=>{
+    }
+    unblockUser=async(call:any,callback:any)=>{
         try {
             const {id} = call.request            
             const response = await user.findByIdAndUpdate(id,{
@@ -66,6 +66,6 @@ export default {
         } catch (error) {
             console.log(error);
         }
-    },
+    }
     
 }

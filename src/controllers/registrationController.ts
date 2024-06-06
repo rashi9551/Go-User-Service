@@ -1,12 +1,13 @@
-import registration from "../useCases/registartion";
+import registartionUseCases from "../useCases/registartionUseCases";
 import auth from "../middleware/auth";
 import { sendOtp } from "../utilities/otpSending";
-import { log } from "@grpc/grpc-js/build/src/logging";
 
 
+const registartionUseCase = new registartionUseCases()
 
-export default {
-  signup: async (call:any,callback:any) => {
+
+export default class registrationController{
+  signup= async (call:any,callback:any) => {
     const { name, email, mobile, password, reffered_Code ,otp,userImage,token } = call.request
     console.log(call.request);
     
@@ -24,7 +25,7 @@ export default {
       const jwtOtp: any = auth.verifyOtpToken(token);
       console.log(otp,jwtOtp,"ithu coookkie token");
       if (otp === jwtOtp?.clientId) {
-          const response = await registration.user_registration(userData);
+          const response = await registartionUseCase.user_registration(userData);
           console.log(response);
           callback(null,response);
       } else {
@@ -36,12 +37,12 @@ export default {
         
       callback(500,{ error: (error as Error).message });
     }
-  },
+  }
 
-  checkUser: async (call: any, callback: any) => {
+  checkUser= async (call: any, callback: any) => {
     const { mobile, email ,name} = call.request;  
     try {
-      const response = await registration.checkUser(mobile, email);
+      const response = await registartionUseCase.checkUser(mobile, email);
       console.log(response);
       
       if (response.message === "user not registered") {
@@ -59,9 +60,9 @@ export default {
         message: (error as Error).message || 'Unknown error occurred during checkUser'
       });
     }
-  },
+  }
   
-  resendOtp:async(call: any, callback: any)=>{
+  resendOtp=async(call: any, callback: any)=>{
     try {
         
         const {email,name}=call.request

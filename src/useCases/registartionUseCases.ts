@@ -12,8 +12,8 @@ interface userData{
 
 }
 
-export default{
-    user_registration:async (userData:userData)=>{
+export default class registartionUseCase{
+    user_registration=async (userData:userData)=>{
         const {name,email,mobile,password,reffered_Code,userImage}=userData
         const imageUrl= await uploadToS3(userImage)
         const refferal_code=refferalCode()
@@ -34,8 +34,8 @@ export default{
             console.log(response);
             
         }
-    },
-    checkUser:async (mobile:number,email:string)=>{
+    }
+    checkUser=async (mobile:number,email:string)=>{
         try {
             const user=await userRepo.checkUser(mobile,email)
         if(user)
@@ -49,5 +49,5 @@ export default{
             return { message: (error as Error).message };
 
         }
-    },
+    }
 }
