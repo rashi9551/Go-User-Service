@@ -1,4 +1,4 @@
-import user from '../entities/user'
+import User from '../entities/user'
 
 interface registration {
     name:string;
@@ -9,10 +9,15 @@ interface registration {
     userImage:any
 }
 
+interface updateData {
+    name?: string | undefined;
+    email?: string | undefined;
+    mobile?: number | undefined;
+}
 
-export default {
-    saveUser:async(userData:registration)=>{
-        const newUser= new user({
+export default  class userRepository{
+    saveUser=async(userData:registration)=>{
+        const newUser= new User({
             name:userData.name,
             email:userData.email,
             mobile:userData.mobile,
@@ -29,15 +34,15 @@ export default {
         } catch (error) {
             return (error as Error).message
         }
-    },
-    checkUser:async (mobile:number,email:string)=>{
+    }
+    checkUser=async (mobile:number,email:string)=>{
         try {
-            const userDetailWithMobile = await user.findOne({ mobile });
+            const userDetailWithMobile = await User.findOne({ mobile });
         if (userDetailWithMobile) {
             return userDetailWithMobile;
         }
 
-        const userDetailWithEmail = await user.findOne({ email });
+        const userDetailWithEmail = await User.findOne({ email });
         if (userDetailWithEmail) {
             return userDetailWithEmail;
         }
@@ -45,24 +50,46 @@ export default {
             return (error as Error).message
 
         }
-    },
-    findUser:async(mobile:number)=>{
+    }
+    findUser=async(mobile:number)=>{
         try {
-            const userData =await user.findOne({mobile})
+            const userData =await User.findOne({mobile})
             return userData
             
         } catch (error) {
             return (error as Error).message
 
         }
-    },
-    findEmail:async(email:string)=>{
+    }
+    findEmail=async(email:string)=>{
         try {
-            const userData=await user.findOne({email})
+            const userData=await User.findOne({email})
             return userData
         } catch (error) {
             return (error as Error).message
 
         }
     }
+    findUserWithStatus=async(status:string)=>{
+        const user=await User.find({account_status:status})
+        return user
+    }
+
+    findAndUpdate=async(id:string,status:string)=>{
+        const user=await User.findByIdAndUpdate(id,{
+            $set:{
+                account_status:status
+            }
+        });
+        return user         
+    }
+    findUserById=async(id:string)=>{
+        const user=await User.findById(id)
+        return user
+    }
+    findOneAndUpdate=async(id:string,updateFields:updateData)=>{
+        const userData= await User.findOneAndUpdate({_id:id},{$set:updateFields},{new:true}).exec()
+        return userData
+    }
+
 }

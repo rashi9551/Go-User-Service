@@ -1,6 +1,8 @@
 import { UserInterface } from '../entities/user'
 import auth from '../middleware/auth'
-import userRepo from '../repositories/userRepo'
+import userRepository from '../repositories/userRepo'
+
+const userRepo=new userRepository()
 
 export default class loginUseCase{
     checkLoginUser=async (mobile:number)=>{

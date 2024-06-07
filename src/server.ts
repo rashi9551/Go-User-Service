@@ -7,11 +7,12 @@ import connectDB from './config/mongo';
 import registrationControl from './controllers/registrationController';
 import loginControl from './controllers/loginController';
 import adminControl from './controllers/adminController';
-
+import userControl from './controllers/userController';
 
 const adminController= new adminControl()
 const loginController= new loginControl()
 const registrationController= new registrationControl() 
+const userController=new userControl()
 
 connectDB();
 
@@ -43,13 +44,13 @@ server.addService(userProto.User.service, {
   ResendOtp: registrationController.resendOtp,
   CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
   CheckLoginUser: loginController.checkLoginUser,
-  GetUser: loginController.getUser,
-  ProfileUpdate: loginController.profileUpdate,
+  GetUser: userController.getUser,
+  ProfileUpdate:userController.profileUpdate,
   AdminLogin: adminController.login,
-  AdminGetData: adminController.getData,
+  AdminGetData: adminController.getUnblockedData,
   AdminGetBlockedData: adminController.getBlockedData,
-  AdminBlockUser: adminController.blockUser,
-  AdminUnblockUser: adminController.unblockUser,
+  AdminUpdateUserStatus: adminController.updateUserStatus,
+  AdminGetUserData: adminController.getUserData,
 });
 
 

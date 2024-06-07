@@ -1,10 +1,10 @@
-import { Response,Request } from "express"
-import user from "../entities/user"
-import auth from "../middleware/auth"
-import { ObjectId } from "mongodb"
+import adminUseCases from "../useCases/adminUseCase";
+import auth from "../middleware/auth";
+import { ObjectId } from "mongodb";
+import { log } from "@grpc/grpc-js/build/src/logging";
+const adminUseCase= new adminUseCases()
 
-
-export default class adminController {
+export default class adminController{
     login=async(call:any,callback:any)=>{
         try {
             const {email,password}=call.request   
@@ -21,51 +21,41 @@ export default class adminController {
             
         }
     }
-    getData=async(call:any,callback:any)=>{
+    getUnblockedData=async(call:any,callback:any)=>{
         try {
-            const User=await user.find({account_status:'Good'})
-            console.log(User,"ithu good");
+            const User=await adminUseCase.getData("Good")
+            console.log(User,"ithu user");
             callback(null,{User})
         } catch (error) {
             console.log(error);
-            
         }
     }
     getBlockedData=async(call:any,callback:any)=>{
         try {
-            const User=await user.find({account_status:'Blocked'})
-            console.log(User,"ithu blocked");
-            
+            const User=await adminUseCase.getData("Blocked")
             callback(null,{User})
         } catch (error) {
             console.log(error);
         }
     }
-    blockUser=async(call:any,callback:any)=>{
+    updateUserStatus=async(call:any,callback:any)=>{
         try {
-            const {id} = call.request            
-            const response = await user.findByIdAndUpdate(id,{
-                $set:{
-                    account_status:"Blocked"
-                }
-            });         
-            callback(null,{message:"user Blocked successfully"})
+            const {id} = call.request
+            const {status}=call.request            
+            const response = await adminUseCase.updateStatus(id,status);         
+            callback(null,{message:"Success"})
         } catch (error) {
             console.log(error);
         }
     }
-    unblockUser=async(call:any,callback:any)=>{
+    getUserData=async(call:any,callback:any)=>{
         try {
-            const {id} = call.request            
-            const response = await user.findByIdAndUpdate(id,{
-                $set:{
-                    account_status:"Good"
-                }
-            });         
-            callback(null,{message:"user Unblocked successfully"})
+            const {id}=call.request            
+            const response = await adminUseCase.getUserData(id)            
+            callback(null,response) 
         } catch (error) {
             console.log(error);
+            
         }
     }
-    
 }

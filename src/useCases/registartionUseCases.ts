@@ -1,4 +1,4 @@
-import userRepo from '../repositories/userRepo'
+import userRepository from '../repositories/userRepo'
 import uploadToS3 from '../services/awsS3';
 import bcrypt from '../services/bcrypt';
 import { refferalCode } from '../utilities/refferalCodeGenerate';
@@ -11,6 +11,7 @@ interface userData{
     userImage:any
 
 }
+const userRepo=new userRepository()
 
 export default class registartionUseCase{
     user_registration=async (userData:userData)=>{
