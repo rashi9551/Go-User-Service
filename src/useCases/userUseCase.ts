@@ -23,7 +23,6 @@ export default class userUseCase {
         })
       );
       const newData = { ...formattedUserData, formattedTransactions };
-      console.log(newData, "ithu new data");
       return newData;
     } else {
       return { message: "Soemthing Internal Error" };
@@ -61,7 +60,6 @@ export default class userUseCase {
           })
         );
         const newData = { ...formattedUserData, formattedTransactions };
-        console.log(newData, "ithu new data vanney");
         return { message: "Success", newData };
       }
     } catch (error) {

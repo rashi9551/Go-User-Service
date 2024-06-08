@@ -27,7 +27,6 @@ export default class loginUseCase{
     checkGoogleUser=async(email:string)=>{
         try {
             const user=await userRepo.findEmail(email) as UserInterface
-            console.log(user,"ithu user");
             if(user)
                 {
                     if(user.account_status!="Blocked"){

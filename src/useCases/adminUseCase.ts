@@ -12,9 +12,7 @@ export default class adminUseCase{
         return response
     }
 
-    updateStatus=async(id:string,status:string)=>{
-        console.log(status,"ithu stauts");
-        
+    updateStatus=async(id:string,status:string)=>{        
         let updateStatus=''
         if(status==='Block'){
             updateStatus+="Blocked"
