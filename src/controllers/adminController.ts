@@ -57,5 +57,5 @@ export default class adminController{
             console.log(error);
             
         }
-    }
+     }
 }
