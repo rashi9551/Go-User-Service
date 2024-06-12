@@ -9,9 +9,9 @@ interface DecodedToken{
 }
 
 export default {
-    createToken:async(clientId:ObjectId | string)=>{
-        const jwtSeceretKey:string | undefined=process.env.USER_SECRET_KEY  || "Rashid"
-        const token=await jwt.sign({clientId},jwtSeceretKey)
+    createToken:async(clientId: ObjectId | string, expire: string): Promise<string>=>{
+        const jwtSecretKey:string | undefined=process.env.USER_SECRET_KEY  || "Rashid"
+        const token = await jwt.sign({ clientId }, jwtSecretKey, { expiresIn: expire });
         return token
 
     },
@@ -29,25 +29,4 @@ export default {
           return ({message:"inavlid otp"});
         }
       },
-    verifyToken:async(req:Request,res:Response,next:NextFunction)=>{
-        try {
-            const token = req.headers.authorization?.trim().split(" ")[1];
-                
-        if (!token) {
-            res.status(401).json({ message: "Unauthorized" });
-        } else {
-            try {
-                const jwtSecretKey =process.env.USER_SECRET_KEY  || "Rashid"
-                const decodedToken = jwt.verify(token, jwtSecretKey) as JwtPayload;
-                // req.clientId = decodedToken.clientId;
-                next();
-            } catch (error) {
-                res.status(500).json({ message: (error as Error).message });
-            }
-        }
-        } catch (error) {
-            console.log(error);
-            
-        }
-    }
 }

@@ -10,7 +10,7 @@ export default class adminController{
             const {email,password}=call.request   
             console.log(call.request);
             if (email ==="admin@gmail.com" && password ==="Admin@123") {            
-                const token = await auth.createToken(new ObjectId())
+                const token = await auth.createToken(new ObjectId(),'2d')
                 callback(null, {message: "Success", email: process.env.ADMIN_EMAIL||"admin@gmail.com",token});
             } else {
                 callback(null,{ message: "Invalid Credentials" });
