@@ -71,25 +71,77 @@ export default  class userRepository{
         }
     }
     findUserWithStatus=async(status:string)=>{
-        const user=await User.find({account_status:status})
-        return user
+        try {
+            const user=await User.find({account_status:status})
+            return user
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
     findAndUpdate=async(id:string,status:string)=>{
-        const user=await User.findByIdAndUpdate(id,{
-            $set:{
-                account_status:status
-            }
-        });
-        return user         
+        try {
+            const user=await User.findByIdAndUpdate(id,{
+                $set:{
+                    account_status:status
+                }
+            });
+            return user         
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+
     }
     findUserById=async(id:string)=>{
-        const user=await User.findById(id)
-        return user
+        try {
+            const user=await User.findById(id)
+            return user
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
     findOneAndUpdate=async(id:string,updateFields:updateData)=>{
-        const userData= await User.findOneAndUpdate({_id:id},{$set:updateFields},{new:true}).exec()
-        return userData
+        try {
+            const userData= await User.findOneAndUpdate({_id:id},{$set:updateFields},{new:true}).exec()
+            return userData
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+    updateWallet=async(id:string,balance:string)=>{
+        try {
+            const userData = await User.findById(id);
+                if (userData) {
+                    const userNewBalance = userData.wallet.balance + Number(balance);
+                    const userTransaction = {
+                        date:new Date() ,
+                        details: `Wallet recharged`,
+                        amount: balance,
+                        status: "Credit",
+                    };
+
+                    await User.findByIdAndUpdate(id, {
+                        $set: {
+                            "wallet.balance": userNewBalance,
+                        },
+                        $push: {
+                            "wallet.transactions": userTransaction,
+                        },
+                });
+                return userData 
+            } 
+        }
+        catch (error) {
+                console.log(error);    
+            }
     }
 
 }

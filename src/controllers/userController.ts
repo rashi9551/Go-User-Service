@@ -12,7 +12,8 @@ export default class userController{
             const {id}=call.request
             console.log(id);
             const response=await userUseCase.findUser(id) 
-            callback(null,response)
+            console.log(response,"++++++");
+            callback(null,{newData:response})
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });
@@ -20,9 +21,27 @@ export default class userController{
     }
 
     profileUpdate=async(call:any,callback:any)=>{
-        const {name,email,mobile,id}=call.request
-        console.log(call.request);
-        const response=await userUseCase.profileUpdate(id,{name,email,mobile})
-        callback(null,response)
+        try {
+            const {name,email,mobile,id}=call.request
+            console.log(call.request);
+            const response=await userUseCase.profileUpdate(id,{name,email,mobile})
+            callback(null,response)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+    addWalletBalance=async(call:any,callback:any)=>{
+        try {
+            const {id,balance}=call.request
+            console.log(call.request);
+            const response=await userUseCase.addWalletBalance(id,balance)
+            callback(null,response)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 }

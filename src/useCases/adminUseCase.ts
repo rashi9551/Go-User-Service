@@ -4,24 +4,42 @@ const userRepo=new userRepository()
 
 export default class adminUseCase{
     getData=async(status:string)=>{
-        const response=userRepo.findUserWithStatus(status)
-        return response
+         try {
+             const response=userRepo.findUserWithStatus(status)
+             return response
+            
+            } catch (error) {
+                console.log(error);
+                
+            }
     }
     getUserData=async(id:string)=>{
-        const response=userRepo.findUserById(id)
-        return response
+        try {
+            const response=userRepo.findUserById(id)
+            return response
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
-    updateStatus=async(id:string,status:string)=>{        
-        let updateStatus=''
-        if(status==='Block'){
-            updateStatus+="Blocked"
-        }
-        else if(status==="Good"){
-            updateStatus+=status
-        }
-        const response=userRepo.findAndUpdate(id,updateStatus)
-        return response
+    updateStatus=async(id:string,status:string)=>{ 
+        try {
+            let updateStatus=''
+            if(status==='Block'){
+                updateStatus+="Blocked"
+            }
+            else if(status==="Good"){
+                updateStatus+=status
+            }
+            const response=userRepo.findAndUpdate(id,updateStatus)
+            return response
+            
+        } catch (error) {
+            console.log(error);
+            
+        }       
     }
 
 
