@@ -31,7 +31,7 @@ export default class loginUseCase{
             if(user)
                 {
                     if(user.account_status!="Blocked"){
-                        const token=await auth.createToken(user._id.toString(),'15m')
+                        const token=await auth.createToken(user._id.toString(),'5s')
                         const refreshToken = await auth.createToken(user._id.toString(), '7d');
                         return {message:"Success",name:user.name,token,_id:user._id,refreshToken}
                     }else {
