@@ -116,6 +116,19 @@ export default  class userRepository{
             
         }
     }
+    rideCancelUpdate=async(id:string,)=>{
+        try {
+            const userData= await User.findOneAndUpdate({_id:id},{
+                    $inc: {
+                        "RideDetails.cancelledRides": 1,
+                    },
+                },{new:true}).exec()
+            return userData 
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
     updateWallet=async(id:string,balance:string)=>{
         try {
             const userData = await User.findById(id);

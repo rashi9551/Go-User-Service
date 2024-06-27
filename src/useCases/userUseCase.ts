@@ -86,6 +86,19 @@ export default class userUseCase {
       return { error: (error as Error).message };
     }
   };
+  rideCancelUpdate = async (id: string) => {
+    try {        
+        const userData=await userRepo.rideCancelUpdate(id)
+        if(userData){
+          return { message: "success"}
+        }else{
+          return { message: 'something went wrong'}
+        }
+    } catch (error) {
+      console.log(error);
+      return { error: (error as Error).message };
+    }
+  };
 
 
 }

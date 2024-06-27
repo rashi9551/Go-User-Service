@@ -44,4 +44,16 @@ export default class userController{
             
         }
     }
+    rideCancelUpdate=async(call:any,callback:any)=>{
+        try {
+            const {userId}=call.request
+            console.log(call.request,"ride cancel");
+            const response=await userUseCase.rideCancelUpdate(userId)
+            callback(null,response)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 }
