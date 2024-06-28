@@ -29,7 +29,8 @@ export default class userController{
             
         } catch (error) {
             console.log(error);
-            
+            callback(null,{ error: (error as Error).message });
+
         }
     }
     addWalletBalance=async(call:any,callback:any)=>{
@@ -41,7 +42,8 @@ export default class userController{
             
         } catch (error) {
             console.log(error);
-            
+            callback(null,{ error: (error as Error).message });
+
         }
     }
     rideCancelUpdate=async(call:any,callback:any)=>{
@@ -53,7 +55,8 @@ export default class userController{
             
         } catch (error) {
             console.log(error);
-            
+            callback(null,{ error: (error as Error).message });
+
         }
     }
 }

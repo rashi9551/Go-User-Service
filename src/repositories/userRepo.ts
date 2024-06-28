@@ -57,6 +57,7 @@ export default  class userRepository{
             return userData
             
         } catch (error) {
+            console.log(error);
             return (error as Error).message
 
         }
@@ -66,6 +67,7 @@ export default  class userRepository{
             const userData=await User.findOne({email})
             return userData
         } catch (error) {
+            console.log(error);
             return (error as Error).message
 
         }
@@ -77,7 +79,7 @@ export default  class userRepository{
             
         } catch (error) {
             console.log(error);
-            
+            return (error as Error).message
         }
     }
 
@@ -92,7 +94,7 @@ export default  class userRepository{
             
         } catch (error) {
             console.log(error);
-            
+            return (error as Error).message
         }
 
     }
@@ -103,7 +105,6 @@ export default  class userRepository{
             
         } catch (error) {
             console.log(error);
-            
         }
     }
     findOneAndUpdate=async(id:string,updateFields:updateData)=>{
@@ -113,7 +114,6 @@ export default  class userRepository{
             
         } catch (error) {
             console.log(error);
-            
         }
     }
     rideCancelUpdate=async(id:string,)=>{
@@ -126,7 +126,7 @@ export default  class userRepository{
             return userData 
         } catch (error) {
             console.log(error);
-            
+            return (error as Error).message
         }
     }
     updateWallet=async(id:string,balance:string)=>{
@@ -153,7 +153,8 @@ export default  class userRepository{
             } 
         }
         catch (error) {
-                console.log(error);    
+                console.log(error);  
+                return (error as Error).message  
             }
     }
 

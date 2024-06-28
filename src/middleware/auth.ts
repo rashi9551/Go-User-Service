@@ -10,9 +10,15 @@ interface DecodedToken{
 
 export default {
     createToken:async(clientId: ObjectId | string, expire: string): Promise<string>=>{
-        const jwtSecretKey:string | undefined=process.env.USER_SECRET_KEY  || "Rashid"
-        const token = await jwt.sign({ clientId }, jwtSecretKey, { expiresIn: expire });
-        return token
+        try {
+            const jwtSecretKey:string | undefined=process.env.USER_SECRET_KEY  || "Rashid"
+            const token = await jwt.sign({ clientId }, jwtSecretKey, { expiresIn: expire });
+            return token
+            
+        } catch (error) {
+            console.log(error);
+            return ("something went wrong")
+        }
 
     },
      verifyOtpToken :(token: string) => {

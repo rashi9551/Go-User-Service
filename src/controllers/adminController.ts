@@ -18,6 +18,8 @@ export default class adminController{
             
             
         } catch (error) {
+            callback(null,{ error: (error as Error).message });
+            console.log(error);
             
         }
     }
@@ -28,6 +30,8 @@ export default class adminController{
             callback(null,{User})
         } catch (error) {
             console.log(error);
+            callback(null,{ error: (error as Error).message });
+
         }
     }
     getBlockedData=async(call:any,callback:any)=>{
@@ -36,6 +40,8 @@ export default class adminController{
             callback(null,{User})
         } catch (error) {
             console.log(error);
+            callback(null,{ error: (error as Error).message });
+
         }
     }
     updateUserStatus=async(call:any,callback:any)=>{
@@ -46,6 +52,8 @@ export default class adminController{
             callback(null,{message:"Success"})
         } catch (error) {
             console.log(error);
+            callback(null,{ error: (error as Error).message });
+
         }
     }
     getUserData=async(call:any,callback:any)=>{
@@ -55,7 +63,7 @@ export default class adminController{
             callback(null,response) 
         } catch (error) {
             console.log(error);
-            
+            callback(null,{ error: (error as Error).message });
         }
      }
 }
