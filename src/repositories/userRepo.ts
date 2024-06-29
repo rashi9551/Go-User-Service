@@ -15,6 +15,14 @@ interface updateData {
     mobile?: number | undefined;
 }
 
+interface ridePayment {
+    userId: string;
+    paymentMode: string;
+    amount: number;
+    rideId:string;
+
+  }
+
 export default  class userRepository{
     saveUser=async(userData:registration)=>{
         const newUser= new User({
@@ -156,6 +164,58 @@ export default  class userRepository{
                 console.log(error);  
                 return (error as Error).message  
             }
+    }
+    RidePayment=async(rideData:ridePayment,)=>{
+        try {
+            const {paymentMode,amount,userId,rideId}=rideData
+            const userData = await User.findById(userId);
+            if(userData){
+                if(paymentMode==="Cash in hand"){
+                    try {
+                        await User.findByIdAndUpdate(userId, {
+                            $inc: {
+                                "RideDetails.completedRides": 1,
+                            },
+                        });
+                        return({ message: "Success" });
+                    } catch (error) {
+                        console.log(error);
+                        return((error as Error).message);
+                    }
+                }else if(paymentMode === 'Wallet'){
+                    try {
+                        const userNewBalance=userData?.wallet?.balance-amount
+                        const userTransaction = {
+                            date: new Date(),
+                            details: `Payment for the ride ${rideId}`,
+                            amount: amount,
+                            status: "Debit",
+                        };
+
+                        await User.findByIdAndUpdate(userId, {
+                            $set: {
+                                "wallet.balance": userNewBalance,
+                            },
+                            $push: {
+                                "wallet.transactions": userTransaction,
+                            },
+                            $inc: {
+                                "RideDetails.completedRides": 1,
+                            },
+                        });
+                        return({ message: "Success" });
+
+                    } catch (error) {
+                        console.log(error);
+                        return (error as Error).message  
+                    }
+                }
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return (error as Error).message
+        }
     }
 
 }

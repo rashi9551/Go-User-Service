@@ -48,6 +48,7 @@ server.addService(userProto.User.service, {
   ProfileUpdate:userController.profileUpdate,
   addWalletBalance:userController.addWalletBalance,
   rideCancelUpdate:userController.rideCancelUpdate,
+  RidePayment:userController.RidePayment,
   AdminLogin: adminController.login,
   AdminGetData: adminController.getUnblockedData,
   AdminGetBlockedData: adminController.getBlockedData,

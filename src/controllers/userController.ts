@@ -36,7 +36,7 @@ export default class userController{
     addWalletBalance=async(call:any,callback:any)=>{
         try {
             const {id,balance}=call.request
-            console.log(call.request);
+            console.log(call.request,"fjsgfasjhfgjhfafagjhfagjh");
             const response=await userUseCase.addWalletBalance(id,balance)
             callback(null,response)
             
@@ -51,6 +51,18 @@ export default class userController{
             const {userId}=call.request
             console.log(call.request,"ride cancel");
             const response=await userUseCase.rideCancelUpdate(userId)
+            callback(null,response)
+            
+        } catch (error) {
+            console.log(error);
+            callback(null,{ error: (error as Error).message });
+
+        }
+    }
+    RidePayment=async(call:any,callback:any)=>{
+        try {
+            console.log(call.request,"ride payment");
+            const response=await userUseCase.RidePayment(call.request)
             callback(null,response)
             
         } catch (error) {

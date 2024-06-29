@@ -7,6 +7,12 @@ interface updateData {
   email: string;
   mobile: number;
 }
+interface ridePayment {
+  userId: string;
+  paymentMode: string;
+  amount: number;
+  rideId:string;
+}
 const userRepo = new userRepository();
 
 export default class userUseCase {
@@ -78,6 +84,8 @@ export default class userUseCase {
   addWalletBalance = async (id: string, balance: string) => {
     try {        
         const userData=await userRepo.updateWallet(id,balance)
+        console.log(id ,balance,"=-=-=-=---=-=-=-=-=-=-=-=----");
+        
         if(userData){
           return { message: "success"}
         }
@@ -91,6 +99,19 @@ export default class userUseCase {
         const userData=await userRepo.rideCancelUpdate(id)
         if(userData){
           return { message: "success"}
+        }else{
+          return { message: 'something went wrong'}
+        }
+    } catch (error) {
+      console.log(error);
+      return { error: (error as Error).message };
+    }
+  };
+  RidePayment = async (ridePayment: ridePayment) => {
+    try {       
+        const response=await userRepo.RidePayment(ridePayment)
+        if(response){
+          return { message: "Success"}
         }else{
           return { message: 'something went wrong'}
         }
