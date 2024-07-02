@@ -1,4 +1,5 @@
 import User from '../entities/user'
+import { ObjectId } from "mongodb";
 
 interface registration {
     name:string;
@@ -20,7 +21,6 @@ interface ridePayment {
     paymentMode: string;
     amount: number;
     rideId:string;
-
   }
 
 export default  class userRepository{
@@ -170,7 +170,7 @@ export default  class userRepository{
             const {paymentMode,amount,userId,rideId}=rideData
             const userData = await User.findById(userId);
             if(userData){
-                if(paymentMode==="Cash in hand"){
+                if(paymentMode==="Cash in hand" || "Stripe"){
                     try {
                         await User.findByIdAndUpdate(userId, {
                             $inc: {
@@ -182,7 +182,8 @@ export default  class userRepository{
                         console.log(error);
                         return((error as Error).message);
                     }
-                }else if(paymentMode === 'Wallet'){
+                }
+                else if(paymentMode === 'Wallet'){
                     try {
                         const userNewBalance=userData?.wallet?.balance-amount
                         const userTransaction = {

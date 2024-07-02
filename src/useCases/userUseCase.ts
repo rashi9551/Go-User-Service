@@ -1,6 +1,13 @@
 import moment from "moment";
 import userRepository from "../repositories/userRepo";
-import Stripe from "stripe";
+import Razorpay  from "razorpay"
+import 'dotenv/config';
+import crypto from 'crypto';
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || "",
+  key_secret: process.env.RAZORPAY_SECRET || "",
+});
 
 interface updateData {
   name: string;
@@ -12,7 +19,12 @@ interface ridePayment {
   paymentMode: string;
   amount: number;
   rideId:string;
+  razorpayOrderId:string;
+  razorpayPaymentId:string;
+  razorpaySignature:string;
 }
+
+
 const userRepo = new userRepository();
 
 export default class userUseCase {
@@ -108,18 +120,68 @@ export default class userUseCase {
     }
   };
   RidePayment = async (ridePayment: ridePayment) => {
-    try {       
+    try {
+      const paymentMode=ridePayment.paymentMode
+      if(paymentMode==='Stripe'){
+        const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = ridePayment;
+        const sign = razorpayOrderId + "|" + razorpayPaymentId;
+        
+        const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET||"")
+        .update(sign.toString())
+        .digest("hex");
+        const isAuthentic = expectedSign === razorpaySignature;
+        if(isAuthentic){
+          const response=await userRepo.RidePayment(ridePayment)
+          if(response){
+            return { message: "Success"}
+          }else{
+            return { message: 'database not saved'}
+          }
+        }else{
+          console.log(isAuthentic,"payment is not working");
+          return{ message: 'razorpay is not authenticated'}
+        }
+      }else{
         const response=await userRepo.RidePayment(ridePayment)
         if(response){
           return { message: "Success"}
         }else{
           return { message: 'something went wrong'}
         }
+      }
     } catch (error) {
       console.log(error);
       return { error: (error as Error).message };
     }
   };
+ razorpayPayment = async (amount: number): Promise<{ message?: string; error?: string }> => {
+    try {
+        if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET) {
+            throw new Error("Razorpay key_id and key_secret must be defined in the environment variables");
+        }
+
+        const options = {
+            amount: Number(amount * 100),
+            currency: "INR",
+            receipt: crypto.randomBytes(10).toString("hex"),
+        };
+
+        return new Promise((resolve, reject) => {
+            razorpayInstance.orders.create(options, (error:any, order:any) => {
+                if (error) {
+                    console.log(error);
+                    reject({ message: "Something Went Wrong!" });
+                } else {
+                    console.log(order, "ithu");
+                    resolve(order);
+                }
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        return { error: (error as Error).message };
+    }
+};
 
 
 }

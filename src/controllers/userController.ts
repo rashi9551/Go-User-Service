@@ -12,7 +12,6 @@ export default class userController{
             const {id}=call.request
             console.log(id);
             const response=await userUseCase.findUser(id) 
-            console.log(response,"++++++");
             callback(null,{newData:response})
         } catch (error) {
             console.log(error);
@@ -65,6 +64,17 @@ export default class userController{
             const response=await userUseCase.RidePayment(call.request)
             callback(null,response)
             
+        } catch (error) {
+            console.log(error);
+            callback(null,{ error: (error as Error).message });
+
+        }
+    }
+    razorpayPayment=async(call:any,callback:any)=>{
+        try {
+            console.log(call.request,"ride payment");
+            const response = await userUseCase.razorpayPayment(call.request.amount);
+            callback(null, response);
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });

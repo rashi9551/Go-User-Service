@@ -49,6 +49,7 @@ server.addService(userProto.User.service, {
   addWalletBalance:userController.addWalletBalance,
   rideCancelUpdate:userController.rideCancelUpdate,
   RidePayment:userController.RidePayment,
+  razorpayPayment:userController.razorpayPayment,
   AdminLogin: adminController.login,
   AdminGetData: adminController.getUnblockedData,
   AdminGetBlockedData: adminController.getBlockedData,
