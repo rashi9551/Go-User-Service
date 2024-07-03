@@ -122,7 +122,7 @@ export default class userUseCase {
   RidePayment = async (ridePayment: ridePayment) => {
     try {
       const paymentMode=ridePayment.paymentMode
-      if(paymentMode==='Stripe'){
+      if(paymentMode==='Upi'){
         const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = ridePayment;
         const sign = razorpayOrderId + "|" + razorpayPaymentId;
         

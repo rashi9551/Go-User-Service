@@ -170,7 +170,7 @@ export default  class userRepository{
             const {paymentMode,amount,userId,rideId}=rideData
             const userData = await User.findById(userId);
             if(userData){
-                if(paymentMode==="Cash in hand" || "Stripe"){
+                if(paymentMode==="Cash in hand" || "Upi"){
                     try {
                         await User.findByIdAndUpdate(userId, {
                             $inc: {

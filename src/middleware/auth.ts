@@ -28,7 +28,6 @@ export default {
         try {
             const decodedToken = jwt.verify(token, secretKey) as JwtPayload;
             console.log(decodedToken,"decode");
-            
             return decodedToken
         } catch (error:any) {
           console.error('Token verification failed:', error.message);
