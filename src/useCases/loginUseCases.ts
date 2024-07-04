@@ -15,7 +15,7 @@ export default class loginUseCase{
                     const refreshToken = await auth.createToken(user._id.toString(), '7d');
                 return {message:"Success",name:user.name,token,_id:user._id,refreshToken}
                 }else {
-                    return {message:"Blocked"}
+                    return {message:"Blocked "}
                 }
             }else{
                 return {message:"No user found"}
