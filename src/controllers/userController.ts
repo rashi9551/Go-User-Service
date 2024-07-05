@@ -35,7 +35,7 @@ export default class userController{
     addWalletBalance=async(call:any,callback:any)=>{
         try {
             const {id,balance}=call.request
-            console.log(call.request,"fjsgfasjhfgjhfafagjhfagjh");
+            console.log(call.request,"fjsgfasjhfgjhfafagjhfagjh ");
             const response=await userUseCase.addWalletBalance(id,balance)
             callback(null,response)
             
