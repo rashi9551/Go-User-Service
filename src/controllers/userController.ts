@@ -1,4 +1,3 @@
-import moment from "moment";
 import userUseCases from "../useCases/userUseCase";
 import { UserInterface } from "../entities/user";
 
@@ -35,7 +34,7 @@ export default class userController{
     addWalletBalance=async(call:any,callback:any)=>{
         try {
             const {id,balance}=call.request
-            console.log(call.request,"fjsgfasjhfgjhfafagjhfagjh ");
+            console.log(call.request,"addWallet balance");
             const response=await userUseCase.addWalletBalance(id,balance)
             callback(null,response)
             

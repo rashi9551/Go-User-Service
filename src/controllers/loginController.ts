@@ -1,7 +1,5 @@
 import { Request,Response,NextFunction } from "express";
 import loginUseCases from "../useCases/loginUseCases";
-import user from "../entities/user";
-import moment from "moment";
 
 const loginUseCase=new loginUseCases()
 

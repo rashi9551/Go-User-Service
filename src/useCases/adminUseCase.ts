@@ -23,6 +23,16 @@ export default class adminUseCase{
             
         }
     }
+    dashboardData=async()=>{
+        try {
+            const response=userRepo.dashboardData()
+            return response
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 
     updateStatus=async(id:string,status:string)=>{ 
         try {

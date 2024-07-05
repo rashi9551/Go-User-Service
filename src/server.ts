@@ -55,6 +55,7 @@ server.addService(userProto.User.service, {
   AdminGetBlockedData: adminController.getBlockedData,
   AdminUpdateUserStatus: adminController.updateUserStatus,
   AdminGetUserData: adminController.getUserData,
+  AdminDashboardData: adminController.dashboardData,
 });
 
 

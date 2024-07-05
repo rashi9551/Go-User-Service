@@ -10,7 +10,7 @@ export default class adminController{
             const {email,password}=call.request   
             console.log(call.request);
             if (email ==="admin@gmail.com" && password ==="Admin@123") {            
-                const token = await auth.createToken(new ObjectId(),'2d')
+                const token = await auth.createToken(new ObjectId(),'3d')
                 callback(null, {message: "Success", email: process.env.ADMIN_EMAIL||"admin@gmail.com",token});
             } else {
                 callback(null,{ message: "Invalid Credentials" });
@@ -60,6 +60,15 @@ export default class adminController{
         try {
             const {id}=call.request            
             const response = await adminUseCase.getUserData(id)            
+            callback(null,response) 
+        } catch (error) {
+            console.log(error);
+            callback(null,{ error: (error as Error).message });
+        }
+     }
+     dashboardData=async(call:any,callback:any)=>{
+        try {           
+            const response = await adminUseCase.dashboardData()    
             callback(null,response) 
         } catch (error) {
             console.log(error);

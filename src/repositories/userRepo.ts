@@ -218,5 +218,38 @@ export default  class userRepository{
             return (error as Error).message
         }
     }
+    dashboardData=async()=>{
+        try {
+            const userData = await User.aggregate([
+                {
+                    $addFields: {
+                        joiningDate: { $toDate: { $toLong: "$joiningDate" } }
+                    }
+                },
+                {
+                    $group: {
+                        _id: { $month: "$joiningDate" },
+                        userCount: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        month: "$_id",
+                        userCount: 1
+                    }
+                },
+                {
+                    $sort: { month: 1 }
+                }
+            ]).exec();
+            const totalUsers=await User.find().count()
+            const blockedUsers=await User.find({account_status:'Blocked'}).count()
+            return {stats:userData,totalUsers:totalUsers,blockedUsers:blockedUsers} 
+        } catch (error) {
+            console.log(error);
+            return (error as Error).message
+        }
+    }
 
 }
