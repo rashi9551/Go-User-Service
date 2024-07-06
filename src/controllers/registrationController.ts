@@ -64,7 +64,6 @@ export default class registrationController{
   
   resendOtp=async(call: any, callback: any)=>{
     try {
-        
         const {email,name}=call.request
         console.log("email",email);
         const token=await sendOtp(email,name)
@@ -73,7 +72,6 @@ export default class registrationController{
     } catch (error) {
         console.log(error);
         callback(null,{ message: "OTP resent errored" });
-
     }
   }
 };

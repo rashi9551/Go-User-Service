@@ -28,11 +28,9 @@ export default class registartionUseCase{
             }
             const response=await userRepo.saveUser(newUserData)
             if(typeof response !== "string" && response._id){
-                // const token = await auth.createToken(response._id.toString())
                 return ({message:"Success"});
             }else{
                 console.log(response);
-                
             }
             
         } catch (error) {
