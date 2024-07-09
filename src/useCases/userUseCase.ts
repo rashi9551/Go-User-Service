@@ -3,6 +3,7 @@ import userRepository from "../repositories/userRepo";
 import Razorpay  from "razorpay"
 import 'dotenv/config';
 import crypto from 'crypto';
+import { StatusCode } from "../utilities/enum";
 
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "",
@@ -133,7 +134,7 @@ export default class userUseCase {
         if(isAuthentic){
           const response=await userRepo.RidePayment(ridePayment)
           if(response){
-            return { message: "Success"}
+            return {message: "Success"}
           }else{
             return { message: 'database not saved'}
           }

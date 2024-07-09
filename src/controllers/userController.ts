@@ -1,5 +1,6 @@
 import userUseCases from "../useCases/userUseCase";
 import { UserInterface } from "../entities/user";
+import { StatusCode } from "../utilities/enum"
 
 
 
@@ -61,8 +62,8 @@ export default class userController{
         try {
             console.log(call.request,"ride payment");
             const response=await userUseCase.RidePayment(call.request)
+            console.log(response);
             callback(null,response)
-            
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });
@@ -77,7 +78,6 @@ export default class userController{
         } catch (error) {
             console.log(error);
             callback(null,{ error: (error as Error).message });
-
         }
     }
 }
