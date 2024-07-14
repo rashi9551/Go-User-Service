@@ -60,11 +60,11 @@ server.addService(userProto.User.service, {
 
 
 const grpcServer = () => {
-  const port = process.env.PORT || '3002';
+  const port = process.env.USER_GRPC_PORT || '3002';
   console.log(port,"sdjfgsjh");
   const Domain=process.env.NODE_ENV==='dev'?process.env.DEV_DOMAIN:process.env.PRO_DOMAIN_USER
   console.log(Domain);
-  server.bindAsync(`${Domain}:${port}`, grpc.ServerCredentials.createInsecure(), (err, bindPort) => {
+  server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, bindPort) => {
     if (err) {
       console.error("Error starting gRPC server:", err);
       return;
