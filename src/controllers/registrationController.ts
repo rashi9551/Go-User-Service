@@ -8,7 +8,7 @@ const registartionUseCase = new registartionUseCases()
 
 export default class registrationController{
   signup= async (call:any,callback:any) => {
-    const { name, email, mobile, password, reffered_Code ,otp,userImage,token } = call.request
+    const { name, email, mobile, password, refferredCode ,otp,userImage,token } = call.request
     console.log(call.request);
     
     const userData = {
@@ -16,7 +16,7 @@ export default class registrationController{
       email,
       mobile,
       password,
-      reffered_Code,
+      refferredCode,
       userImage,
       otp,
       token

@@ -6,7 +6,7 @@ interface userData{
     email:string;
     mobile:number;
     password:string;
-    reffered_Code:string,
+    refferredCode:string,
     userImage:any
 
 }
@@ -15,7 +15,10 @@ const userRepo=new userRepository()
 export default class registartionUseCase{
     user_registration=async (userData:userData)=>{
         try {
-            const {name,email,mobile,password,reffered_Code,userImage}=userData
+            const {name,email,mobile,password,refferredCode,userImage}=userData
+            if(refferredCode){
+                await userRepo.referralAddWallet(refferredCode,name)
+            }
             const refferal_code=refferalCode()
             const hashedPassword=await bcrypt.securePassword(password)
             const newUserData={
@@ -30,7 +33,7 @@ export default class registartionUseCase{
             if(typeof response !== "string" && response._id){
                 return ({message:"Success"});
             }else{
-                console.log(response);
+                return ({message:"Something went wrong in user"});
             }
             
         } catch (error) {

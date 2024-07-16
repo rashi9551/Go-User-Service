@@ -1,4 +1,4 @@
-import User from '../entities/user'
+import User, { UserInterface } from '../entities/user'
 import { ObjectId } from "mongodb";
 
 interface registration {
@@ -43,6 +43,52 @@ export default  class userRepository{
             return (error as Error).message
         }
     }
+    referralAddWallet = async (referred_code: string, name: string): Promise<UserInterface | string> => {
+        try {
+            const userData: UserInterface = await User.findOne({ referral_code: referred_code }) as UserInterface;    
+            if (userData) {
+                try {
+                    const driverNewBalance = userData.wallet.balance + 150;
+                    const driverTransaction = {
+                        date: new Date(),
+                        details: `you earned referral money from ${name}`,
+                        amount: 150,
+                        status: 'Credit',
+                    };
+    
+                    const updateResult: UserInterface = await User.findOneAndUpdate(
+                        { referral_code: referred_code },
+                        {
+                            $set: {
+                                'wallet.balance': driverNewBalance,
+                            },
+                            $push: {
+                                'wallet.transactions': driverTransaction,
+                            },
+                        },
+                        { new: true }
+                    ) as UserInterface;
+    
+                    if (updateResult) {
+                        return updateResult;
+                    } else {
+                        throw new Error('Driver not found or update failed.');
+                    }
+                } catch (error) {
+                    console.error('Error updating driver:', error);
+                    return (error as Error).message;
+                }
+            } else {
+                throw new Error('Driver not found.');
+            }
+        } catch (error) {
+            console.error('Error finding user:', error);
+            return (error as Error).message;
+        }
+    };
+    
+       
+    
     checkUser=async (mobile:number,email:string)=>{
         try {
             const userDetailWithMobile = await User.findOne({ mobile });

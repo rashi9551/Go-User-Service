@@ -43,7 +43,7 @@ export default class userUseCase {
             ...transactions,
             formattedDate: moment(transactions.date).format("dddd, DD-MM-YYYY"),
             })
-          );          
+          ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); 
         const newData = { ...formattedUserData, formattedTransactions };
         return newData;
       } else {
@@ -100,7 +100,7 @@ export default class userUseCase {
         console.log(id ,balance,"=-=-=-=---=-=-=-=-=-=-=-=----");
         
         if(userData){
-          return { message: "success"}
+          return { message: "Success"}
         }
     } catch (error) {
       console.log(error);
