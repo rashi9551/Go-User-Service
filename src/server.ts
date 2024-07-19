@@ -39,6 +39,7 @@ const server = new grpc.Server();
 
 
 server.addService(userProto.User.service, {
+  testerLogin: loginController.testerLogin,
   Register: registrationController.signup,
   CheckUser: registrationController.checkUser,
   ResendOtp: registrationController.resendOtp,

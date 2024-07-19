@@ -28,4 +28,15 @@ export default class loginController{
             callback(null,{ error: (error as Error).message });
         }
     }
+    testerLogin=async(call:any,callback:any)=>{
+        try {
+            console.log(call.request);
+            const response=await loginUseCase.testerLogin(call.request)
+            console.log(response);
+            callback(null,response)
+        } catch (error) {
+            console.log(error);
+            callback(null,{ error: (error as Error).message });
+        }
+    }
 }
