@@ -14,7 +14,6 @@ export default {
             const jwtSecretKey:string | undefined=process.env.USER_SECRET_KEY  || "Rashid"
             const token = await jwt.sign({ clientId }, jwtSecretKey, { expiresIn: expire });
             return token
-            
         } catch (error) {
             console.log(error);
             return ("something went wrong")

@@ -5,11 +5,22 @@ const loginUseCase=new loginUseCases()
 
 export default class loginController{
     checkLoginUser=async (call:any,callback:any)=>{
-        const {mobile}=call.request
+        const {email}=call.request
         console.log(call.request);
         
         try {
-            const response=await loginUseCase.checkLoginUser(mobile)
+            const response=await loginUseCase.checkLoginUser(email)
+            callback(null,response)
+        } catch (error) {
+            console.log(error);
+            callback(null,{ error: (error as Error).message });
+        }
+    }
+    verifyOtp=async (call:any,callback:any)=>{
+        const {otp,email}=call.request
+        console.log(call.request);
+        try {
+            const response=await loginUseCase.verifyOtp(otp,email)
             callback(null,response)
         } catch (error) {
             console.log(error);

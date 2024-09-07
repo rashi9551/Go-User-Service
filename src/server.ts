@@ -45,6 +45,7 @@ server.addService(userProto.User.service, {
   ResendOtp: registrationController.resendOtp,
   CheckGoogleLoginUser: loginController.checkGoogleLoginUser,
   CheckLoginUser: loginController.checkLoginUser,
+  verifyOtp: loginController.verifyOtp,
   GetUser: userController.getUser,
   ProfileUpdate:userController.profileUpdate,
   addWalletBalance:userController.addWalletBalance,
